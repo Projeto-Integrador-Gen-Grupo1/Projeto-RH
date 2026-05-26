@@ -9,19 +9,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.generation.projetorh.repository.FuncionarioRepository;
 import com.generation.projetorh.repository.PostagemRepository;
 
 @RestController
-@RequestMapping("/postagens")
+@RequestMapping("/Funcionarios")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-public class PostagemController {
+public class FuncionarioController {
 
 	@Autowired
-	private PostagemRepository postagemRepository;
+	private FuncionarioRepository postagemRepository;
 	
 	@GetMapping
-	public ResponseEntity<List<Postagem>> getAll(){
-		return ResponseEntity.ok(postagemRepository.findAll());
+	public ResponseEntity<List<Funcionario>> getAll(){
+		return ResponseEntity.ok(FuncionarioRepository.findAll());
 	}
 	
 }
