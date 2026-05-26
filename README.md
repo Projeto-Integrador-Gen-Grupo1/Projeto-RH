@@ -202,7 +202,7 @@ Projeto-RH/
 | Membro | GitHub |
 |--------|--------|
 | Ana Karoline Costa De Sousa | [@anakaroline](https://github.com/anakaroline) |
-| Danielle Karen Mendes Caricati | [@daniellekaren](https://github.com/daniellekaren) |
+| Danielle Karen Mendes Caricati | [@daniellekaren](https://github.com/daniellecaricati) |
 | Felipe Marques | [@felipemarques](https://github.com/felipemarques) |
 | Paulo Gustavo Pereira de Souza Brito | [@Paulogsbrito](https://github.com/Paulogsbrito) |
 | Riane Toscano | [@rianetoscano](https://github.com/rianetoscano) |
