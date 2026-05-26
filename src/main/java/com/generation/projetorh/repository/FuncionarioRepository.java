@@ -7,6 +7,9 @@ import com.generation.projetorh.model.Funcionario;
 
 public interface FuncionarioRepository extends JpaRepository<Funcionario, Long> {
 	
-	// Query Method para a PARTE 9: buscar por título (ignorando maiúsculas/minúsculas)
-	public List<Funcionario> findAllByTituloContainingIgnoreCase(@Param("titulo") String titulo);
-}
+	public List<Funcionario> findAllByNomeContainingIgnoreCase(@Param("nome") String nome);
+	
+
+	    public List<Funcionario> findAllByCargoContainingIgnoreCase(String cargo);
+
+	}

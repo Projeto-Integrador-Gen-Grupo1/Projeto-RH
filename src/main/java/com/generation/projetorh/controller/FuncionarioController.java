@@ -36,7 +36,7 @@ public class FuncionarioController {
 		return ResponseEntity.ok(funcionarioRepository.findAll()); 
 	}
 	
-	// ==================== PARTE 8: GET BY ID ====================
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<Funcionario> getById(@PathVariable Long id) {
 		return funcionarioRepository.findById(id)
@@ -44,7 +44,7 @@ public class FuncionarioController {
 				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
 	}
 	
-	// ==================== PARTE 9: GET BY CARGO ====================
+	
 	@GetMapping("/cargo/{cargo}")
 	public ResponseEntity<List<Funcionario>> getByCargo(@PathVariable String cargo) {
 		return ResponseEntity.ok(funcionarioRepository.findAllByCargoContainingIgnoreCase(cargo));
