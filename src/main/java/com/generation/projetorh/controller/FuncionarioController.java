@@ -19,10 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.generation.projetorh.model.Funcionario;
+import com.generation.projetorh.repository.FuncionarioRepository;
 
 import jakarta.validation.Valid;
-
-import com.generation.projetorh.repository.FuncionarioRepository;
 
 @RestController
 @RequestMapping("/funcionarios") 
@@ -35,6 +34,20 @@ public class FuncionarioController {
 	@GetMapping
 	public ResponseEntity<List<Funcionario>> getAll(){
 		return ResponseEntity.ok(funcionarioRepository.findAll()); 
+	}
+	
+	// ==================== PARTE 8: GET BY ID ====================
+	@GetMapping("/{id}")
+	public ResponseEntity<Funcionario> getById(@PathVariable Long id) {
+		return funcionarioRepository.findById(id)
+				.map(resposta -> ResponseEntity.ok(resposta))
+				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+	}
+	
+	// ==================== PARTE 9: GET BY CARGO ====================
+	@GetMapping("/cargo/{cargo}")
+	public ResponseEntity<List<Funcionario>> getByCargo(@PathVariable String cargo) {
+		return ResponseEntity.ok(funcionarioRepository.findAllByCargoContainingIgnoreCase(cargo));
 	}
 	
 	@PostMapping
@@ -60,5 +73,4 @@ public class FuncionarioController {
 		
 		funcionarioRepository.deleteById(id);
 	}
-
 }
