@@ -9,7 +9,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
@@ -35,6 +34,12 @@ public class Funcionario {
     @Positive(message = "O salário deve ser maior que zero")
     private BigDecimal salario;
 
+    @Positive(message = "O valor da hora deve ser maior que zero")
+    private BigDecimal valorHora;
+
+    private Integer horasTrabalhadas;
+
+    private BigDecimal descontos;
 
     private LocalDate dataContratacao;
 
@@ -78,6 +83,29 @@ public class Funcionario {
         this.salario = salario;
     }
 
+    public BigDecimal getValorHora() {
+        return valorHora;
+    }
+
+    public void setValorHora(BigDecimal valorHora) {
+        this.valorHora = valorHora;
+    }
+
+    public Integer getHorasTrabalhadas() {
+        return horasTrabalhadas;
+    }
+
+    public void setHorasTrabalhadas(Integer horasTrabalhadas) {
+        this.horasTrabalhadas = horasTrabalhadas;
+    }
+
+    public BigDecimal getDescontos() {
+        return descontos;
+    }
+
+    public void setDescontos(BigDecimal descontos) {
+        this.descontos = descontos;
+    }
 
     public LocalDate getDataContratacao() {
         return dataContratacao;
