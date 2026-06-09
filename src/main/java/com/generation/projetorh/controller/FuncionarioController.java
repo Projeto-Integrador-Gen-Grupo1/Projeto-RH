@@ -20,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.generation.projetorh.model.Funcionario;
 import com.generation.projetorh.repository.FuncionarioRepository;
+import com.generation.projetorh.service.FuncionarioService;
 
 import jakarta.validation.Valid;
 
@@ -30,12 +31,14 @@ public class FuncionarioController {
 
 	@Autowired
 	private FuncionarioRepository funcionarioRepository;
+
+	@Autowired
+	private FuncionarioService funcionarioService;
 	
 	@GetMapping
 	public ResponseEntity<List<Funcionario>> getAll(){
 		return ResponseEntity.ok(funcionarioRepository.findAll()); 
 	}
-	
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Funcionario> getById(@PathVariable Long id) {
@@ -43,7 +46,6 @@ public class FuncionarioController {
 				.map(resposta -> ResponseEntity.ok(resposta))
 				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
 	}
-	
 	
 	@GetMapping("/cargo/{cargo}")
 	public ResponseEntity<List<Funcionario>> getByCargo(@PathVariable String cargo) {
@@ -53,13 +55,17 @@ public class FuncionarioController {
 	@PostMapping
 	public ResponseEntity<Funcionario> post(@Valid @RequestBody Funcionario funcionario) {
 		funcionario.setId(null);
-		return ResponseEntity.status(HttpStatus.CREATED).body(funcionarioRepository.save(funcionario));
+
+		return funcionarioService.cadastrarFuncionario(funcionario)
+				.map(resposta -> ResponseEntity.status(HttpStatus.CREATED).body(resposta))
+				.orElse(ResponseEntity.badRequest().build());
 	}
 	
 	@PutMapping
 	public ResponseEntity<Funcionario> put(@Valid @RequestBody Funcionario funcionario) {
 		return funcionarioRepository.findById(funcionario.getId())
-				.map(resposta -> ResponseEntity.status(HttpStatus.OK).body(funcionarioRepository.save(funcionario)))
+				.flatMap(resposta -> funcionarioService.cadastrarFuncionario(funcionario))
+				.map(resposta -> ResponseEntity.status(HttpStatus.OK).body(resposta))
 				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
 	}
 	
