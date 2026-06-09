@@ -1,14 +1,16 @@
 package com.generation.projetorh.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
-import org.hibernate.annotations.UpdateTimestamp;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
@@ -17,75 +19,87 @@ import jakarta.validation.constraints.Size;
 @Entity
 @Table(name = "tb_funcionarios")
 public class Funcionario {
-	@Id
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "O atributo nome é Obrigatório!")
+    @NotBlank(message = "O atributo nome é obrigatório!")
     @Size(min = 3, max = 100, message = "O atributo nome deve conter no mínimo 3 e no máximo 100 caracteres")
     private String nome;
 
-    @NotBlank(message = "O atributo cargo é Obrigatório!")
+    @NotBlank(message = "O atributo cargo é obrigatório!")
     @Size(min = 3, max = 50, message = "O atributo cargo deve conter no mínimo 3 e no máximo 50 caracteres")
     private String cargo;
-
-    @NotBlank(message = "O atributo departamento é Obrigatório!")
-    @Size(min = 3, max = 50, message = "O atributo departamento deve conter no mínimo 3 e no máximo 50 caracteres")
-    private String departamento;
 
     @Positive(message = "O salário deve ser maior que zero")
     private BigDecimal salario;
 
-    @UpdateTimestamp
-    private LocalDateTime data;
 
-	public Long getId() {
-		return id;
-	}
+    private LocalDate dataContratacao;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @ManyToOne
+    @JsonIgnoreProperties("funcionarios")
+    private Departamento departamento;
 
-	public String getNome() {
-		return nome;
-	}
+    @ManyToOne
+    @JsonIgnoreProperties("funcionarios")
+    private Usuario usuario;
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public String getCargo() {
-		return cargo;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setCargo(String cargo) {
-		this.cargo = cargo;
-	}
+    public String getNome() {
+        return nome;
+    }
 
-	public String getDepartamento() {
-		return departamento;
-	}
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-	public void setDepartamento(String departamento) {
-		this.departamento = departamento;
-	}
+    public String getCargo() {
+        return cargo;
+    }
 
-	public BigDecimal getSalario() {
-		return salario;
-	}
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
+    }
 
-	public void setSalario(BigDecimal salario) {
-		this.salario = salario;
-	}
+    public BigDecimal getSalario() {
+        return salario;
+    }
 
-	public LocalDateTime getData() {
-		return data;
-	}
+    public void setSalario(BigDecimal salario) {
+        this.salario = salario;
+    }
 
-	public void setData(LocalDateTime data) {
-		this.data = data;
-	}
-    
 
+    public LocalDate getDataContratacao() {
+        return dataContratacao;
+    }
+
+    public void setDataContratacao(LocalDate dataContratacao) {
+        this.dataContratacao = dataContratacao;
+    }
+
+    public Departamento getDepartamento() {
+        return departamento;
+    }
+
+    public void setDepartamento(Departamento departamento) {
+        this.departamento = departamento;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
 }
