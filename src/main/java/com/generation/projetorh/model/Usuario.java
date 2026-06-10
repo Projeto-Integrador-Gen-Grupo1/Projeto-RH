@@ -1,11 +1,11 @@
 package com.generation.projetorh.model;
 
-
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -30,6 +30,7 @@ public class Usuario {
     @NotBlank(message = "O CPF é obrigatório")
     private String cpf;
 
+    @Schema(example = "email@email.com.br")
     @NotBlank(message = "O usuário é obrigatório")
     private String usuario;
 
