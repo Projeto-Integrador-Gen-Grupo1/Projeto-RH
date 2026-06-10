@@ -81,14 +81,22 @@ public class UsuarioController {
 
 	@PutMapping
 	public ResponseEntity<Usuario> put(@Valid @RequestBody Usuario usuario) {
-		return usuarioRepository.findById(usuario.getId())
-				.map(resposta -> ResponseEntity.ok(usuarioRepository.save(usuario)))
-				.orElse(ResponseEntity.notFound().build());
+
+		return usuarioService.atualizarUsuario(usuario)
+				.map(resposta -> ResponseEntity.status(HttpStatus.OK).body(resposta))
+				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+
 	}
 
 	@DeleteMapping("/{id}")
-	public void delete(@PathVariable Long id) {
-		usuarioRepository.deleteById(id);
+	public ResponseEntity<Void> delete(@PathVariable Long id) {
+
+		if (usuarioRepository.existsById(id)) {
+			usuarioRepository.deleteById(id);
+			return ResponseEntity.noContent().build();
+		}
+
+		return ResponseEntity.notFound().build();
 	}
 
 }
