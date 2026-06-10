@@ -1,13 +1,17 @@
 package com.generation.projetorh.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -16,6 +20,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class BasicSecurityConfig {
+	
+	// injeta o segyurança que le o token
+	@Autowired
+	private JwtAuthFilter authFilter;
+	
+	// Usa a sua classe de busca de usuário
+	@Bean
+	UserDetailsService userDetailsService() {
+		return new UserDetailsServiceImpl(); 
+	}
 
 	@Bean
 	PasswordEncoder passwordEncoder() {
@@ -25,6 +39,14 @@ public class BasicSecurityConfig {
 	@Bean
 	AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
 		return authenticationConfiguration.getAuthenticationManager();
+	}
+	
+	@Bean
+	AuthenticationProvider authenticationProvider() {
+		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+		authenticationProvider.setUserDetailsService(userDetailsService());
+		authenticationProvider.setPasswordEncoder(passwordEncoder());
+		return authenticationProvider;
 	}
 
 	@Bean
@@ -42,7 +64,11 @@ public class BasicSecurityConfig {
 				.requestMatchers("/v3/api-docs/**").permitAll()
 				.anyRequest().authenticated()
 			)
-			.httpBasic();
+			.authenticationProvider(authenticationProvider())
+			//substitui o httpBasic (pedia aquela janelinha de usuário e senha do navegador/Insomnia)
+			// a nova funcionalidade do addFilter = ativa o interceptador de tokens
+			.addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
+			
 
 		return http.build();
 	}
