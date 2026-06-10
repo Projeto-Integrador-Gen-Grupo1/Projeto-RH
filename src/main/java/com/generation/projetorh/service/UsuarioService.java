@@ -3,8 +3,10 @@ package com.generation.projetorh.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.generation.projetorh.model.Usuario;
 import com.generation.projetorh.model.UsuarioLogin;
@@ -61,6 +63,12 @@ public class UsuarioService {
 
 		if (usuarioRepository.findById(usuario.getId()).isEmpty())
 			return Optional.empty();
+		
+		Optional<Usuario> usuarioExistente = usuarioRepository.findByUsuario(usuario.getUsuario());
+		
+		if (usuarioExistente.isPresent() && !usuarioExistente.get().getId().equals(usuario.getId())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário já existe!", null);
+        }
 
 		usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
 
