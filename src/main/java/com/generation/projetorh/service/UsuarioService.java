@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.generation.projetorh.model.Usuario;
 import com.generation.projetorh.model.UsuarioLogin;
 import com.generation.projetorh.repository.UsuarioRepository;
+import com.generation.projetorh.security.JwtService;
 
 @Service
 public class UsuarioService {
@@ -18,6 +19,9 @@ public class UsuarioService {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private JwtService jwtService;
 
 	public Optional<Usuario> cadastrarUsuario(Usuario usuario) {
 
@@ -40,8 +44,11 @@ public class UsuarioService {
 
 			if (passwordEncoder.matches(usuarioLogin.get().getSenha(), usuario.get().getSenha())) {
 
-				usuarioLogin.get().setToken("Usuário autenticado");
+				usuarioLogin.get().setId(usuario.get().getId());
 				usuarioLogin.get().setNome(usuario.get().getNome());
+				usuarioLogin.get().setFoto(usuario.get().getFoto());
+				//trocado para implementar o JWT = Gerador de Token
+				usuarioLogin.get().setToken("Bearer " + jwtService.generateToken(usuarioLogin.get().getUsuario()));
 
 				return usuarioLogin;
 			}
@@ -59,4 +66,5 @@ public class UsuarioService {
 
 		return Optional.of(usuarioRepository.save(usuario));
 	}
+
 }
